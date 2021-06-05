@@ -102,16 +102,36 @@ function userCollectionSeed() {
             }
         ]
     })
-    fatima.save();
-    mohammed.save();
+    const amara = new myUserModel({
+        email: 'amaraalbalkhi94@gmail.com',
+        books: [
+            {
+                name: 'Light',
+                description: 'One of the most underrated prose writers demonstrates the literary firepower of science fiction at its best.',
+                imgUrl:'https://i.guim.co.uk/img/media/94560f671d3027e1ee4449f6cb4c4cf33d63a723/0_0_323_499/master/323.jpg?width=120&quality=45&auto=format&fit=max&dpr=2&s=e822521726816f24ea93b4a7e1cc68fd'
+
+            }
+            ,
+            {
+                name : 'Chronicles: Volume One',
+                description: 'Dylan’s reticence about his personal life is a central part of the singer-songwriter’s brand, so the gaps and omissions in this memoir come as no surprise. The result is both sharp and dreamy',
+                imgUrl:'https://i.guim.co.uk/img/media/eec342b926fd7028814f86dc3080e63b3c9a75fb/0_0_1500_900/master/1500.jpg?width=465&quality=45&auto=format&fit=max&dpr=2&s=62b26cab157f5e615b849f385d5ca8a9' 
+            }
+        ]
+    })
+    // fatima.save();
+    // mohammed.save();
+    amara.save();
     console.log(fatima);
 }
 
 
-// userCollectionSeed();
+userCollectionSeed();
 //  proof of life
 app.get('/', homePageHandler);
 app.get('/books',getBooksHandler);
+app.post('/books',createBookHandler);
+app.delete('/books:id',deleteBookHandler);
 
 
 function homePageHandler(req, res) {
@@ -134,6 +154,46 @@ function getBooksHandler(req,res) {
         }
     })
 }
+
+function createBookHandler(req,res) {
+    let { email, imgUrl, name, description } = req.body;
+    // let {name} = req.query
+    myUserModel.find({email:email},async (err,userData) =>{
+        if(err) {
+            console.log('did not work')
+        } else {
+            console.log(userData)
+            userData[0].books.push({
+                name: name,
+                imgUrl: imgUrl,
+                description: description
+            })
+            await userData[0].save();
+            res.send(userData[0].books)
+        }
+    })
+}
+
+function deleteBookHandler(req,res) {
+    let {id } = req.params;
+    let {email} = req.query;
+    myUserModel.find({email:email}, async (err,userData) =>{
+        if(err) {
+            console.log('did not work')
+        } else {
+            console.log(userData)
+            let userBooks = userData[0].books.filter((item)=>{
+                if(item._id != id) {
+                    return item;
+                }
+            })
+            userData[0].books = userBooks;
+            await userData[0].save();
+            res.send(userData[0].books)
+        }
+    })
+}
+
 
 
 
