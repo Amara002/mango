@@ -108,7 +108,7 @@ function userCollectionSeed() {
 }
 
 
-// userCollectionSeed();
+userCollectionSeed();
 //  proof of life
 app.get('/', homePageHandler);
 app.get('/books',getBooksHandler);
