@@ -12,7 +12,7 @@ app.use(cors());
 const PORT = process.env.PORT;
 
 // connect express server to mongodb server
-mongoose.connect('mongodb://localhost:27017/books',
+mongoose.connect(process.env.MONGODB_URI,
     { useNewUrlParser: true, useUnifiedTopology: true }); //deprecation warnings
 
 
@@ -108,7 +108,7 @@ function userCollectionSeed() {
 }
 
 
-userCollectionSeed();
+// userCollectionSeed();
 //  proof of life
 app.get('/', homePageHandler);
 app.get('/books',getBooksHandler);
