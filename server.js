@@ -158,6 +158,7 @@ function getBooksHandler(req,res) {
 function createBookHandler(req,res) {
     let { email, imgUrl, name, description } = req.body;
     // let {name} = req.query
+    console.log('user email', req.body);
     myUserModel.find({email:email},async (err,userData) =>{
         if(err) {
             console.log('did not work')
